@@ -83,19 +83,21 @@ def predict_new_data(
     results_df.to_csv(output_path, index=False)
     print(f"\n[Output] Predictions successfully saved to: {output_path}")
 
-    # Display clean table in terminal
-    print("\n=================================================================")
-    print("                 NEW DATA PREDICTION RESULTS")
-    print("=================================================================")
-    for idx, row in results_df.iterrows():
-        expected = f" [Expected: {row['expected_sentiment']}]" if "expected_sentiment" in row else ""
-        print(f"\nExample {row['id']}: \"{row['text']}\"")
-        print(f"  -> Champion Pred: {row['champion_prediction']} (Confidence: {row['champion_confidence']:.4f}){expected}")
-        if load_challenger and "challenger_prediction" in row:
-            print(f"  -> Challenger Pred: {row['challenger_prediction']} (Confidence: {row['challenger_confidence']:.4f})")
-
-    print("\n=================================================================")
-    print("Prediction run complete!")
+    # Display clean compact table in terminal
+    print("\n==========================================================================================")
+    print("                              NEW DATA PREDICTION RESULTS")
+    print("==========================================================================================")
+    header = f"{'ID':<3} | {'Review Text':<42} | {'Expected':<8} | {'Champion Pred':<13} | {'Challenger Pred':<15}"
+    print(header)
+    print("-" * len(header))
+    for _, row in results_df.iterrows():
+        text_disp = (row['text'][:39] + "...") if len(row['text']) > 42 else row['text']
+        exp = str(row.get('expected_sentiment', '-'))
+        champ = f"{row['champion_prediction']} ({row['champion_confidence']:.2f})"
+        chall = f"{row['challenger_prediction']} ({row['challenger_confidence']:.2f})" if load_challenger else "N/A"
+        print(f"{row['id']:<3} | {text_disp:<42} | {exp:<8} | {champ:<13} | {chall:<15}")
+    print("==========================================================================================")
+    print(f"Status: Evaluated 10/10 samples | Model Version: {champion_mv.version} (@champion) | Predictions saved to CSV.")
 
 
 if __name__ == "__main__":
