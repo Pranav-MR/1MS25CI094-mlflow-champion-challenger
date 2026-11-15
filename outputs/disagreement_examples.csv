@@ -1,0 +1,9 @@
+sample_id,text,ground_truth,distilbert_prediction,distilbert_confidence,bert_prediction,bert_confidence,explanation
+4,"it moves quickly , adroitly , and without fuss ; it does n't give you time to reflect on the inanity -- and the cold war datedness -- of its premise . ",Positive,Positive,0.6455,Negative,0.8644,Champion correctly identified as Positive; Challenger misclassified as Negative.
+44,it has all the excitement of eating oatmeal . ,Negative,Negative,0.5354,Positive,0.8291,Champion correctly identified as Negative; Challenger misclassified as Positive.
+56,oh come on . ,Negative,Positive,0.9851,Negative,0.8134,Challenger correctly identified as Negative; Champion misclassified as Positive.
+94,a bloated gasbag thesis grotesquely impressed by its own gargantuan aura of self-importance ... ,Negative,Positive,0.8487,Negative,0.9965,Challenger correctly identified as Negative; Champion misclassified as Positive.
+112,"writer/director joe carnahan 's grimy crime drama is a manual of precinct cliches , but it moves fast enough to cover its clunky dialogue and lapses in logic . ",Positive,Negative,0.9432,Positive,0.7445,Challenger correctly identified as Positive; Champion misclassified as Negative.
+116,"sustains its dreamlike glide through a succession of cheesy coincidences and voluptuous cheap effects , not the least of which is rebecca romijn-stamos . ",Negative,Positive,0.944,Negative,0.9891,Challenger correctly identified as Negative; Champion misclassified as Positive.
+161,"outer-space buffs might love this film , but others will find its pleasures intermittent . ",Negative,Positive,0.7708,Negative,0.789,Challenger correctly identified as Negative; Champion misclassified as Positive.
+183,not since tom cruise in risky business has an actor made such a strong impression in his underwear . ,Positive,Positive,0.8139,Negative,0.709,Champion correctly identified as Positive; Challenger misclassified as Negative.

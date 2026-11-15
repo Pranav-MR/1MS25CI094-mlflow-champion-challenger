@@ -21,7 +21,7 @@ This project implements a reproducible, automated **Champion–Challenger MLOps 
 
 | Role | Model Name | Hugging Face ID | Architecture / Size |
 | :--- | :--- | :--- | :--- |
-| **Model A (Champion)** | DistilBERT SST-2 | `distilbert-base-uncased-finetuned-sst-2-english` | 6 layers, 66M parameters |
+| **Model A (Initial Champion)** | DistilBERT SST-2 | `distilbert-base-uncased-finetuned-sst-2-english` | 6 layers, 66M parameters |
 | **Model B (Challenger)** | BERT SST-2 | `textattack/bert-base-uncased-SST-2` | 12 layers, 110M parameters |
 
 Both models receive identical tokenization limits (`max_length=128`), inference batch sizes (`batch_size=16`), and evaluation inputs in deterministic order on CPU.
@@ -43,7 +43,7 @@ Both models receive identical tokenization limits (`max_length=128`), inference 
 
 - **Language**: Python 3.10+
 - **Deep Learning & NLP**: Hugging Face `transformers`, `torch` (CPU mode), `datasets`
-- **MLOps & Tracking**: `mlflow` (Experiment tracking, PyFunc wrappers, Model Registry)
+- **MLOps & Tracking**: `mlflow` (Experiment tracking, PyFunc custom model wrappers, Model Registry)
 - **Evaluation & Utilities**: `scikit-learn`, `pandas`, `numpy`, `matplotlib`
 - **Version Control**: Git & GitHub
 
@@ -53,7 +53,7 @@ Both models receive identical tokenization limits (`max_length=128`), inference 
 
 > **Predefined Decision Rule (Formulated prior to experimental execution):**
 > 1. **Primary Metric**: Macro F1-score ($F_{1,\text{macro}}$). Higher is better.
-> 2. **Challenger Promotion Threshold**: The Challenger (Model B) must improve Macro F1 by at least **0.01 (+1.0%)** over the Champion (Model A) ($\Delta F_1 \ge +0.01$) to claim the Champion title.
+> 2. **Challenger Promotion Threshold**: The Challenger (Model B) must improve Macro F1 by at least **0.01 (+1.0%)** over the Champion (Model A) ($\Delta F_1 \ge +0.01$) to replace the Champion.
 > 3. **Retention Policy**: If $\Delta F_1 < +0.01$, the current Champion (Model A) is retained.
 > 4. **Tie-Breaker / Margin Rule**: If the Macro F1 difference is within the margin ($|\Delta F_1| < 0.01$), the model with lower average inference latency (faster CPU execution) is preferred.
 > 5. **Consistency Rule**: Both candidate models must be evaluated under strictly identical conditions (sample size, seed, max length, CPU hardware).
@@ -85,7 +85,7 @@ pip install -r requirements.txt
 
 ---
 
-## 7. Execution Commands in Order
+## 7. Exact Execution Commands in Order
 
 Execute the following commands sequentially to run the entire project:
 
@@ -96,7 +96,7 @@ python evaluate.py --smoke-test
 # Step 2: Full 200-sample Champion-Challenger Evaluation
 python evaluate.py
 
-# Step 3: Register Models and Assign Aliases (@champion and @challenger)
+# Step 3: Register Models and Assign Dynamic Aliases (@champion and @challenger)
 python register_champion.py
 
 # Step 4: Run Inference on 10 New Examples using MLflow Champion Alias
@@ -107,42 +107,54 @@ python predict_from_mlflow.py --with-challenger
 
 ## 8. Results Comparison Table
 
-*(Populated dynamically from verified experimental execution on 200 SST-2 validation samples)*
+*(Populated from verified experimental execution on 200 deterministic SST-2 validation samples)*
 
-| Metric | Model A (DistilBERT - Champion) | Model B (BERT - Challenger) | Difference ($\Delta = \text{B} - \text{A}$) |
+| Metric | Model A (DistilBERT - Initial Champion) | Model B (BERT - Challenger) | Difference ($\Delta = \text{B} - \text{A}$) |
 | :--- | :--- | :--- | :--- |
-| **Accuracy** | *Pending Run* | *Pending Run* | *Pending Run* |
-| **Precision (Macro)** | *Pending Run* | *Pending Run* | *Pending Run* |
-| **Recall (Macro)** | *Pending Run* | *Pending Run* | *Pending Run* |
-| **Macro F1-Score** | *Pending Run* | *Pending Run* | *Pending Run* |
-| **Avg Latency (ms/sample)** | *Pending Run* | *Pending Run* | *Pending Run* |
-| **Total Inference Time (s)** | *Pending Run* | *Pending Run* | *Pending Run* |
+| **Accuracy** | 0.9350 (93.50%) | **0.9450 (94.50%)** | +0.0100 (+1.00%) |
+| **Precision (Macro)** | 0.9359 | **0.9442** | +0.0083 |
+| **Recall (Macro)** | 0.9331 | **0.9450** | +0.0119 |
+| **Macro F1-Score (Primary)** | 0.9343 | **0.9446** | **+0.0103 (+1.03%)** |
+| **Avg Latency (ms/sample)** | **10.90 ms** | 21.68 ms | +10.78 ms (+98.9%) |
+| **Total Inference Time (s)** | **2.18 s** | 4.34 s | +2.16 s |
 
 ---
 
 ## 9. Final Decision & Justification
 
-*(Will be populated with actual figures upon pipeline execution)*
+**Winner**: **Model B (Challenger: `textattack/bert-base-uncased-SST-2`)**  
+**Assigned Registry Alias**: `@champion` (Version 2)  
+**Incumbent Reassignment**: `@challenger` (Version 1)
+
+### Formal Justification (205 words)
+Based on the predefined champion-challenger decision rule established prior to testing, Model B (Challenger: `textattack/bert-base-uncased-SST-2`) has officially replaced Model A (Champion: `distilbert-base-uncased-finetuned-sst-2-english`) as the new production Champion.
+
+The primary evaluation criterion stipulated that the Challenger must improve the Macro F1-score by at least 0.01 (+1.00%) over the incumbent model on the identical 200-sample SST-2 validation dataset. Model B achieved a Macro F1-score of 0.9446 compared to Model A's 0.9343, generating a net performance delta of $\Delta F_1 = +0.0103$. Because $+0.0103 \ge 0.01$, the Challenger successfully met the mandatory threshold for promotion. Furthermore, Model B demonstrated superior balanced recall (0.9450 vs. 0.9331) and higher overall classification accuracy (94.50% vs. 93.50%).
+
+Although Model B's average inference latency is roughly twice that of Model A (21.68 ms vs. 10.90 ms on CPU) due to its 12-layer 110M parameter architecture, the decision rule explicitly requires latency tie-breaking only when the primary metric difference falls strictly within the $\pm 0.01$ margin. Because the performance improvement exceeded the promotion threshold, Model B is crowned the new Champion and registered under the MLflow Model Registry alias `@champion` (Version 2), while Model A has been reassigned to `@challenger` (Version 1).
 
 ---
 
 ## 10. Model Trade-offs, Latency and Limitations
 
 1. **Model Capacity vs. Compute Cost**:
-   - **DistilBERT** retains ~97% of BERT's language understanding while being 40% smaller and ~60% faster, making it exceptionally well-suited for low-latency CPU environments.
-   - **BERT-Base** contains 110M parameters with 12 transformer encoder blocks, yielding deeper contextual representations at the cost of higher CPU memory consumption and ~2x inference latency.
+   - **DistilBERT** retains ~97% of BERT's language understanding capability while being 40% smaller (66M vs. 110M parameters) and ~50% faster (10.90 ms vs. 21.68 ms per inference on CPU).
+   - **BERT-Base** leverages 12 full transformer encoder blocks with 12 self-attention heads, yielding superior contextual representations on syntactically complex or sarcastic phrasing, but requiring higher memory throughput and CPU computation time.
 
 2. **Inference Latency Trade-Off**:
-   - In production microservices, lower latency directly impacts user experience and server scaling costs. A small accuracy boost must be weighted against throughput degradation.
+   - In low-latency interactive applications, DistilBERT's 10.90 ms latency delivers nearly double the request throughput. However, in batch scoring or quality-critical sentiment pipelines where accuracy is paramount, BERT's +1.03% Macro F1 gain justifies the 10.78 ms additional latency.
 
-3. **Domain Limitations**:
-   - Both models are fine-tuned on SST-2 (movie reviews). Performance may degrade on slang, domain-specific terminology (e.g., medical or financial text), sarcasm, or multi-sentence paragraphs exceeding `max_length=128`.
+3. **Disagreement Analysis Insights**:
+   - Evaluation on 200 samples revealed 8 concrete disagreements ([`outputs/disagreement_examples.csv`](outputs/disagreement_examples.csv)). BERT excelled at detecting nuanced negative reviews containing complex sarcasm or vocabulary (e.g., *"a bloated gasbag thesis grotesquely impressed by its own gargantuan aura of self-importance"*, where DistilBERT mispredicted Positive with 84.9% confidence, while BERT correctly predicted Negative with 99.7% confidence).
+
+4. **Domain Limitations**:
+   - Both models are fine-tuned on SST-2 (movie review snippets). Accuracy may degrade on cross-domain texts (such as financial filings or clinical notes), multi-sentence documents exceeding `max_length=128`, or domain-specific jargon.
 
 ---
 
 ## 11. Instructions to Access MLflow UI
 
-Launch the MLflow tracking user interface to visually inspect runs, metric curves, and registry aliases:
+Launch the MLflow tracking user interface to visually inspect runs, parameter comparisons, metric charts, and model registry aliases:
 
 ```bash
 mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
@@ -154,7 +166,8 @@ mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
    - `A_sentiment_distilbert-sst2`
    - `B_sentiment_bert-sst2`
    - `compare_sentiment`
-4. Navigate to the **Models** tab at the top to view the registered model `sentiment-model` and inspect its `@champion` and `@challenger` aliases.
+4. Inspect logged parameters (`max_length`, `batch_size`, `seed`, `device`), metrics (`accuracy`, `macro_f1`, `avg_latency_ms`), tags (`student_usn`), and artifacts (`predictions_*.csv`, `confusion_matrix_*.png`, `model_comparison.png`).
+5. Navigate to the **Models** tab at the top to view the registered model `sentiment-model` and verify the assigned `@champion` (Version 2) and `@challenger` (Version 1) aliases.
 
 ---
 
@@ -172,7 +185,7 @@ To compare predictions against the challenger model simultaneously:
 python predict_from_mlflow.py --with-challenger
 ```
 
-The script loads `models:/sentiment-model@champion`, processes 10 new test samples in [`data/new_data.csv`](data/new_data.csv), prints the results to the terminal, and exports them to [`outputs/new_data_predictions.csv`](outputs/new_data_predictions.csv).
+The script dynamically resolves `models:/sentiment-model@champion`, processes the 10 unseen test samples in [`data/new_data.csv`](data/new_data.csv), displays the predictions and confidence scores in the terminal, and exports them to [`outputs/new_data_predictions.csv`](outputs/new_data_predictions.csv).
 
 ---
 

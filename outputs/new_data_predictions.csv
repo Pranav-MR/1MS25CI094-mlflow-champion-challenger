@@ -1,0 +1,11 @@
+id,text,expected_sentiment,champion_prediction,champion_confidence,challenger_prediction,challenger_confidence
+1,The film was an absolute masterpiece with breathtaking cinematography and stellar acting.,Positive,Positive,0.9997,Positive,0.9999
+2,I was thoroughly disappointed by the sluggish pace and uninspired storyline.,Negative,Negative,0.9991,Negative,0.9998
+3,A charming and heartwarming story that left the entire theater smiling.,Positive,Positive,0.9998,Positive,0.9999
+4,The plot was utterly predictable and the characters felt completely flat.,Negative,Negative,0.9992,Negative,0.9998
+5,An extraordinary blend of witty humor and poignant drama that kept me engaged throughout.,Positive,Positive,0.9997,Positive,0.9999
+6,Save your money and skip this monotonous disaster of a movie.,Negative,Negative,0.9989,Negative,0.9998
+7,Brilliant direction and an unforgettable soundtrack make this a standout gem.,Positive,Positive,0.9997,Positive,0.9999
+8,The special effects could not rescue an otherwise terrible and confusing script.,Negative,Negative,0.9981,Negative,0.9997
+9,A delightfully quirky comedy full of memorable performances and great laughs.,Positive,Positive,0.9998,Positive,0.9999
+10,"Painfully dull and painfully long, offering almost nothing new to the genre.",Negative,Negative,0.9992,Negative,0.9998

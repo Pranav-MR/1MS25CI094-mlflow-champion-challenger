@@ -1,0 +1,44 @@
+{
+    "timestamp": "2026-11-15 16:59:29",
+    "dataset": "glue/sst2",
+    "sample_size": 200,
+    "primary_metric": "macro_f1",
+    "margin": 0.01,
+    "delta_primary_metric": 0.0103,
+    "winner": "Challenger",
+    "winner_model_id": "textattack/bert-base-uncased-SST-2",
+    "decision_reason": "Challenger outperformed Champion by 0.0103 (>= margin of 0.01).",
+    "run_ids": {
+        "model_a": "68c0708c18ac4ee9ac5c633bcd10f644",
+        "model_b": "dddbefc8e0634ddbac524382a4a9b034"
+    },
+    "models": {
+        "model_a_champion": {
+            "hf_model_id": "distilbert-base-uncased-finetuned-sst-2-english",
+            "role": "Champion",
+            "run_id": "68c0708c18ac4ee9ac5c633bcd10f644",
+            "metrics": {
+                "accuracy": 0.935,
+                "precision": 0.9359,
+                "recall": 0.9331,
+                "macro_f1": 0.9343,
+                "avg_latency_ms": 10.9,
+                "total_inference_s": 2.18
+            }
+        },
+        "model_b_challenger": {
+            "hf_model_id": "textattack/bert-base-uncased-SST-2",
+            "role": "Challenger",
+            "run_id": "dddbefc8e0634ddbac524382a4a9b034",
+            "metrics": {
+                "accuracy": 0.945,
+                "precision": 0.9442,
+                "recall": 0.945,
+                "macro_f1": 0.9446,
+                "avg_latency_ms": 21.68,
+                "total_inference_s": 4.34
+            }
+        }
+    },
+    "disagreements_count": 8
+}
