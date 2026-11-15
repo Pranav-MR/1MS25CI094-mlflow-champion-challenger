@@ -1,0 +1,11 @@
+id,text,expected_sentiment
+1,"The film was an absolute masterpiece with breathtaking cinematography and stellar acting.",Positive
+2,"I was thoroughly disappointed by the sluggish pace and uninspired storyline.",Negative
+3,"A charming and heartwarming story that left the entire theater smiling.",Positive
+4,"The plot was utterly predictable and the characters felt completely flat.",Negative
+5,"An extraordinary blend of witty humor and poignant drama that kept me engaged throughout.",Positive
+6,"Save your money and skip this monotonous disaster of a movie.",Negative
+7,"Brilliant direction and an unforgettable soundtrack make this a standout gem.",Positive
+8,"The special effects could not rescue an otherwise terrible and confusing script.",Negative
+9,"A delightfully quirky comedy full of memorable performances and great laughs.",Positive
+10,"Painfully dull and painfully long, offering almost nothing new to the genre.",Negative
